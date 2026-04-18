@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>iSchool Attendance Manager 🌟</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- SheetJS for Excel handling -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- Google Fonts: Nunito (kid-friendly, rounded) + Baloo 2 (display) -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="app-header">
+    <div class="header-inner">
+      <!-- Left logo placeholder -->
+      <div class="logo-box" id="logo-ischool">
+        <span class="logo-emoji"><img src="logo-ischool.png" alt=""></span>
+      </div>
+
+      <!-- Title -->
+      <div class="header-title">
+        <h1>Attendance <span class="accent">Manager</span></h1>
+        <p class="subtitle">Smart Class Tracker for Kids 🌈</p>
+      </div>
+
+      <!-- Right logo placeholder -->
+      <div class="logo-box" id="    ">
+        <span class="logo-emoji"><img src="logo-initiative.png" alt=""></span>
+      </div>
+    </div>
+
+    <!-- Navigation tabs -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="import">📂 Import</button>
+      <button class="tab-btn" data-tab="attendance">✅ Attendance</button>
+      <button class="tab-btn" data-tab="picker">🎲 Random Pick</button>
+      <button class="tab-btn" data-tab="dashboard">📊 Dashboard</button>
+    </nav>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="app-main">
+
+    <!-- ── TAB 1: IMPORT ── -->
+    <section class="tab-panel active" id="tab-import">
+      <div class="card import-card">
+        <div class="card-icon">📋</div>
+        <h2>Upload Student List</h2>
+        <p class="card-desc">Upload an Excel file (.xlsx) with a <strong>"Name"</strong> column to get started!</p>
+
+        <label class="upload-zone" id="upload-zone" for="file-input">
+          <div class="upload-icon">📁</div>
+          <p class="upload-text">Click or drag & drop your Excel file here</p>
+          <p class="upload-hint">.xlsx files only</p>
+          <input type="file" id="file-input" accept=".xlsx" hidden />
+        </label>
+
+        <div id="upload-feedback" class="upload-feedback hidden"></div>
+
+        <div class="import-actions">
+          <button class="btn btn-secondary" id="btn-load-sample">🧪 Load Sample Students</button>
+          <button class="btn btn-danger" id="btn-clear-all">🗑️ Clear All Data</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TAB 2: ATTENDANCE ── -->
+    <section class="tab-panel" id="tab-attendance">
+      <div class="attendance-toolbar">
+        <div class="toolbar-left">
+          <h2>📋 Today's Attendance</h2>
+          <span class="student-count" id="student-count-label">0 students</span>
+        </div>
+        <div class="toolbar-right">
+          <button class="btn btn-secondary btn-sm" id="btn-mark-all">✅ Mark All Present</button>
+          <button class="btn btn-warning btn-sm" id="btn-reset-session">🔄 Reset Session</button>
+          <button class="btn btn-success" id="btn-export">⬇️ Export Excel</button>
+        </div>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="stats-strip" id="stats-strip">
+        <div class="stat-pill" id="stat-start">🟢 Start: 0</div>
+        <div class="stat-pill" id="stat-break">🟡 Break: 0</div>
+        <div class="stat-pill" id="stat-end">🔴 End: 0</div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="attendance-table" id="attendance-table">
+          <thead>
+            <tr>
+              <th class="th-num">#</th>
+              <th class="th-name">Student Name</th>
+              <th class="th-check">
+                <span class="checkpoint-badge start">Session Start</span>
+              </th>
+              <th class="th-check">
+                <span class="checkpoint-badge break">After Break</span>
+              </th>
+              <th class="th-check">
+                <span class="checkpoint-badge end">Session End</span>
+              </th>
+              <th class="th-status">Status</th>
+            </tr>
+          </thead>
+          <tbody id="attendance-body">
+            <!-- Rows injected by JS -->
+          </tbody>
+        </table>
+        <div class="empty-state hidden" id="empty-attendance">
+          <div class="empty-icon">🎒</div>
+          <p>No students yet! Go to <strong>Import</strong> tab to upload your class list.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TAB 3: RANDOM PICKER ── -->
+    <section class="tab-panel" id="tab-picker">
+      <div class="picker-wrap">
+        <div class="picker-card">
+          <h2>🎲 Random Student Picker</h2>
+          <p class="picker-desc">Spin the wheel to randomly select a student!</p>
+
+          <!-- Filter toggle -->
+          <label class="filter-toggle">
+            <input type="checkbox" id="filter-present" checked />
+            <span class="toggle-track"></span>
+            <span class="toggle-label">Only pick from <strong>present</strong> students</span>
+          </label>
+
+          <!-- Spinner display -->
+          <div class="spinner-stage" id="spinner-stage">
+            <div class="spinner-glow"></div>
+            <div class="spinner-name" id="spinner-name">?</div>
+          </div>
+
+          <!-- Pick button -->
+          <button class="btn btn-pick" id="btn-pick">🎲 Pick a Student!</button>
+
+          <!-- Result card -->
+          <div class="result-card hidden" id="result-card">
+            <div class="result-emoji">🌟</div>
+            <p class="result-label">Selected Student:</p>
+            <p class="result-name" id="result-name">—</p>
+            <p class="result-sub" id="result-sub"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TAB 4: DASHBOARD ── -->
+    <section class="tab-panel" id="tab-dashboard">
+      <div class="dashboard-grid">
+        <div class="dash-card dash-total">
+          <div class="dash-icon">👥</div>
+          <div class="dash-value" id="dash-total">0</div>
+          <div class="dash-label">Total Students</div>
+        </div>
+        <div class="dash-card dash-start">
+          <div class="dash-icon">🟢</div>
+          <div class="dash-value" id="dash-pct-start">0%</div>
+          <div class="dash-label">Session Start</div>
+          <div class="dash-bar-wrap"><div class="dash-bar" id="bar-start"></div></div>
+        </div>
+        <div class="dash-card dash-break">
+          <div class="dash-icon">🟡</div>
+          <div class="dash-value" id="dash-pct-break">0%</div>
+          <div class="dash-label">After Break</div>
+          <div class="dash-bar-wrap"><div class="dash-bar" id="bar-break"></div></div>
+        </div>
+        <div class="dash-card dash-end">
+          <div class="dash-icon">🔴</div>
+          <div class="dash-value" id="dash-pct-end">0%</div>
+          <div class="dash-label">Session End</div>
+          <div class="dash-bar-wrap"><div class="dash-bar" id="bar-end"></div></div>
+        </div>
+
+        <!-- Absent list -->
+        <div class="dash-card dash-absent">
+          <div class="dash-icon">⚠️</div>
+          <div class="dash-label" style="font-size:1.1rem;font-weight:800;margin-bottom:.5rem">Absent / Incomplete Students</div>
+          <ul class="absent-list" id="absent-list"><li class="empty-msg">All present! 🎉</li></ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== TOAST NOTIFICATION ===== -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== SOUND EFFECT (Web Audio API – no file needed) ===== -->
+  <script src="app.js"></script>
+</body>
+</html>

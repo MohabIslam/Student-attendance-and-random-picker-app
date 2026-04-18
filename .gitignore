@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Package manager files (keep package-lock.json for consistency)
+# package-lock.json should be committed for reproducible builds
+yarn.lock
+pnpm-lock.yaml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# Vercel
+.vercel

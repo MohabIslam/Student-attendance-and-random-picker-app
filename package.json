@@ -1,0 +1,21 @@
+{
+  "name": "student-attendance-and-random-picker-app",
+  "version": "1.0.0",
+  "description": "iSchool Attendance Manager - Smart Class Tracker for Kids",
+  "main": "app.js",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site - no build needed'",
+    "lint": "echo 'No linter configured'"
+  },
+  "keywords": [
+    "attendance",
+    "education",
+    "student-management"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  }
+}

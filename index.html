@@ -195,5 +195,11 @@
 
   <!-- ===== SOUND EFFECT (Web Audio API – no file needed) ===== -->
   <script src="app.js"></script>
+  
+  <!-- ===== VERCEL WEB ANALYTICS ===== -->
+  <script type="module">
+    import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@1/dist/index.mjs';
+    inject();
+  </script>
 </body>
 </html>
